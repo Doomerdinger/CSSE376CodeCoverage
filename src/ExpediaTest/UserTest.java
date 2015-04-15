@@ -2,6 +2,7 @@ package ExpediaTest;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -104,14 +105,40 @@ public class UserTest
 	}
 	
 	@Test
-	public void TestThatDiscountInitializes()
+	public void TestForNoDiscountTwo() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		Field ins = ServiceLocator.class.getDeclaredField("_instance");
+		ins.setAccessible(true);
+		ins.set(null, null);
+		Discount target = new Discount(0.01, 999999999);
+		ServiceLocator.Instance().AddDiscount(target);
+		this.target.book(new Booking[]{new Flight(StartDate, EndDate, 100), new Hotel(5), new Car(3)});
+		assertEquals(1035.0,this.target.Price(), 0.01);
+	}
+	
+	@Test
+	public void TestForNoDiscount() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		Field ins = ServiceLocator.class.getDeclaredField("_instance");
+		ins.setAccessible(true);
+		ins.set(null, null);
+		Discount target = new Discount(0.00, 1);
+		ServiceLocator.Instance().AddDiscount(target);
+		this.target.book(new Booking[]{new Flight(StartDate, EndDate, 100), new Hotel(5), new Car(3)});
+		assertEquals(1035.0,this.target.Price(), 0.01);
+	}
+	
+	@Test
+	public void TestThatDiscountInitializes() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
 	{
 		Discount target = new Discount(0.01, 1);
+		Field ins = ServiceLocator.class.getDeclaredField("_instance");
+		ins.setAccessible(true);
+		ins.set(null, null);
 		ServiceLocator.Instance().AddDiscount(target);
 		this.target.book(new Booking[]{new Flight(StartDate, EndDate, 100), new Hotel(5), new Car(3)});
 		assertEquals(1024.65,this.target.Price(), 0.01);
 	}
-
 	
 	@After
 	public void TearDown()

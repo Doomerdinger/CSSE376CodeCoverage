@@ -80,6 +80,10 @@ public class User {
 	            // flight rules say you can't earn more than 5000 double miles for each flight
 	            bonusFrequentFlierMiles += 5000;
 	        }
+	        else
+	        {
+	        	bonusFrequentFlierMiles += booking.getMiles();
+	        }
 	    }
 	}
 }

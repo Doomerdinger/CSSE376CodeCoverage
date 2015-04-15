@@ -1,5 +1,7 @@
 package ExpediaTest;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import Expedia.Flight;
 import Expedia.Hotel;
 import Expedia.IDatabase;
 
@@ -87,30 +90,45 @@ public class HotelTest
         //mocks.VerifyAll();
         EasyMock.verify(mockDB);
     }
-//    @Test
-//    public void TestThatHotelDoesGetRoomCountFromDatabase()
-//    {
-//    	IDatabase mockDB = EasyMock.createStrictMock(IDatabase.class);
-//        List<String> Rooms = new LinkedList<String>();
-//        for (int i = 0; i < 100; i++)
-//        {
-//            Rooms.add(i);
-//        }
-//
-//        // FIXME: what is the EasyMock equivalent, if any?
-//        //EasyMock.expect(mockDB.Rooms).PropertyBehavior();
-//
-//        EasyMock.replay(mockDB);
-//
-//        mockDB.Rooms = Rooms;
-//
-//
-//        var target = new Hotel(10);
-//        target.Database = mockDatabase;
-//
-//        int roomCount = target.AvailableRooms;
-//        Assert.AreEqual(Rooms.Count, roomCount);
-//
-//        mocks.VerifyAll();
-//    }
+	
+	@Test
+	public void TestThatHotelDoesGetRoomCountFromDatabase()
+	{
+		IDatabase mockDatabase = new IDatabase()
+			{
+				public List<String> Passengers = null;
+				public List<String> Rooms = null;
+				public int Miles = 0;
+				@Override
+				public String getCarLocation(int carNumber) 
+				{
+				// TODO Auto-generated method stub
+					return null;
+				}
+				@Override
+				public String getRoomOccupant(int roomNumber) 
+				{
+					// TODO Auto-generated method stub
+					return null;
+				}
+			};
+		
+		ArrayList<String> list = new ArrayList<String>();
+		for(int i = 0; i < 50; i++)
+			list.add(i + "");
+		mockDatabase.Rooms = list;
+		Hotel target = new Hotel(10);
+		
+		target.Database = mockDatabase;
+		Assert.assertEquals(50, target.AvailableRooms());
+	}
+	
+	@Test
+	public void TestThatHotelHasNoMiles()
+	{
+		Hotel target = new Hotel(10);
+		
+		Assert.assertEquals(0, target.getMiles());
+	}
+
 }
